@@ -13,11 +13,56 @@ const tasks = [
 
 const taskTextElement = document.querySelector("#task-text");
 const nextTaskButton = document.querySelector("#next-task-btn");
+const completeButton = document.querySelector("#complete-btn");
+const completeMessageElement = document.querySelector("#complete-message");
+const historyListElement = document.querySelector("#history-list");
+const historyStorageKey = "choisuteHistory";
+let currentTask = "";
+let historyTasks = [];
+
+function saveHistory() {
+  localStorage.setItem(historyStorageKey, JSON.stringify(historyTasks));
+}
+
+function renderHistory() {
+  historyListElement.innerHTML = "";
+
+  historyTasks.forEach((task) => {
+    const historyItem = document.createElement("li");
+    historyItem.textContent = task;
+    historyListElement.appendChild(historyItem);
+  });
+}
+
+function loadHistory() {
+  const storedHistory = localStorage.getItem(historyStorageKey);
+  if (!storedHistory) return;
+
+  const parsedHistory = JSON.parse(storedHistory);
+  if (!Array.isArray(parsedHistory)) return;
+
+  historyTasks = parsedHistory;
+  renderHistory();
+}
 
 function showRandomTask() {
   const randomIndex = Math.floor(Math.random() * tasks.length);
-  taskTextElement.textContent = tasks[randomIndex];
+  currentTask = tasks[randomIndex];
+  taskTextElement.textContent = currentTask;
+  completeMessageElement.textContent = "";
 }
 
+function completeTask() {
+  if (!currentTask) return;
+
+  completeMessageElement.textContent = "完了しました";
+
+  historyTasks.push(currentTask);
+  renderHistory();
+  saveHistory();
+}
+
+loadHistory();
 showRandomTask();
 nextTaskButton.addEventListener("click", showRandomTask);
+completeButton.addEventListener("click", completeTask);
