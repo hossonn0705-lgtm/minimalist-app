@@ -39,3 +39,13 @@ http://localhost:8000
 - ✅ ボタン1つで別タスクに切り替え
 - ✅ 「完了」で完了メッセージ表示 + 履歴追加
 - ✅ スマホで見やすいシンプルUI
+
+## main 競合が出たときの更新手順（メモ）
+
+手動で競合を直さず、最新 `main` を取り込んだうえで変更を再適用する場合の例:
+
+```bash
+git fetch origin main
+git reset --hard origin/main
+git cherry-pick <完了機能のコミット>
+```
