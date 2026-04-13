@@ -13,11 +13,28 @@ const tasks = [
 
 const taskTextElement = document.querySelector("#task-text");
 const nextTaskButton = document.querySelector("#next-task-btn");
+const completeButton = document.querySelector("#complete-btn");
+const completeMessageElement = document.querySelector("#complete-message");
+const historyListElement = document.querySelector("#history-list");
+let currentTask = "";
 
 function showRandomTask() {
   const randomIndex = Math.floor(Math.random() * tasks.length);
-  taskTextElement.textContent = tasks[randomIndex];
+  currentTask = tasks[randomIndex];
+  taskTextElement.textContent = currentTask;
+  completeMessageElement.textContent = "";
+}
+
+function completeTask() {
+  if (!currentTask) return;
+
+  completeMessageElement.textContent = "完了しました";
+
+  const historyItem = document.createElement("li");
+  historyItem.textContent = currentTask;
+  historyListElement.appendChild(historyItem);
 }
 
 showRandomTask();
 nextTaskButton.addEventListener("click", showRandomTask);
+completeButton.addEventListener("click", completeTask);
